@@ -1,26 +1,30 @@
 const router = require("express").Router();
-const { findById, createNewNote, deleteNoteById } = require("../../lib/notes");
-let { notes } = require("../../db/db");
-
+const { createNewNote, deleteNoteById } = require("../../lib/notes");
+const fs = require("fs");
+const path = require("path");
 
 // get all notes
 router.get("/notes", (req, res) => {
-  const result = notes;
-  res.json(result);
-});
-
-// filter notes by their id
-router.get("/notes/:id", (req, res) => {
-  const result = findById(req.params.id, notes);
-  if (result) {
-    res.json(result);
-  } else {
-    res.send(404);
-  }
+  fs.readFile(
+    path.join(__dirname, "../../db/db.json"),
+    "utf8",
+    function (err, data) {
+      if (err) {
+        console.log(err);
+      } else {
+        let { notes } = JSON.parse(data);
+        res.json(notes);
+      }
+    }
+  );
 });
 
 // save new note
 router.post("/notes", (req, res) => {
+  // getting the data
+  data = fs.readFileSync(path.join(__dirname, "../../db/db.json"));
+  let { notes } = JSON.parse(data);
+  console.log(notes);
   // creating and id that is equal to the last id used plus one
   let lastInt = 0;
   if (notes.length) {
@@ -37,7 +41,7 @@ router.post("/notes", (req, res) => {
 
 // delete note
 router.delete("/notes/:id", (req, res) => {
-  const result = deleteNoteById(req.params.id, notes);
+  const result = deleteNoteById(req.params.id);
   if (result) {
     res.json(result);
   } else {

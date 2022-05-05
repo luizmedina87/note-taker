@@ -28,4 +28,6 @@ THEN I am presented with empty fields to enter a new note title and the note’s
 
 -> OK! build api to get one specific note (get)
 
--> build api to save a new note (post)
+-> OK! build api to save a new note (post)
+ 
+-> OK! build api to delete a note (delete)
